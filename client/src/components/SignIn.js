@@ -74,7 +74,7 @@ const SignIn = () => {
               </Button>
             </Grid>
             <Grid item>
-              <Button href="#" variant="text">
+              <Button href="/signup" variant="text">
                 {"Don't have an account? Sign Up"}
               </Button>
             </Grid>
