@@ -4,19 +4,23 @@ import React, { useState } from 'react';
 import { Button, TextField, Typography, Container, Grid, Box } from '@mui/material';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/firebase-config';
+import { NavLink, Navigate, useNavigate } from 'react-router-dom';
+
 
 const SignIn = () => {
+  console.log("SignIn")
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
+  const navigate = useNavigate();
   const handleSignIn = async (e) => {
     e.preventDefault();
     setError('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert('Login Successful');
+      // alert('Login Successful');
       // Redirect user or perform further actions
+      navigate("/dashboard")
     } catch (err) {
       setError(err.message);
     }
