@@ -18,6 +18,7 @@ const SignIn = () => {
     setError('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      
       // alert('Login Successful');
       // Redirect user or perform further actions
       navigate("/dashboard")
