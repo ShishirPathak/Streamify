@@ -52,7 +52,7 @@ function ResponsiveAppBar() {
           { name: "Upload Videos", path: "/upload-videos" },
           // { name: "SignOut", path: "/signout", action: handleSignOut }, // Add SignOut
         ]
-      : [{ name: "SignIn", path: "/signin" }]),
+      : [{ name: "Sign in", path: "/signin" }]),
   ];
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);

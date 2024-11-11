@@ -28,24 +28,24 @@ let upload = multer({
       cb(null, `videos/${Date.now()}_${file.originalname}`);
     },
   }),
-}).single("uploadVideo");
+}).single("file");
 
  const uploadVideo = async (req, res) => {
+  console.log("uploadVideo from server")
   upload(req, res, async (err) => {
     if (err) {
       console.error("S3 Upload Error:", err);
       return res.status(500).json({ error: "Error uploading file to S3" });
     }
-    const { title, description } = req.body;
+    const { title, description, userId } = req.body;
     const videoUrl = req.file.location;
 
     const uploadVideoModel = new UploadVideoModel({
       title,
       description,
       videoUrl,
-      userId: req.user._id,
-      createdAt: Date.now,
-      modifiedAt: Date.now,
+      userId
+      
     });
     await uploadVideoModel.save();
 
