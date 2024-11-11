@@ -33,7 +33,7 @@ const MyProfile = () => {
       data.append("email", formData.email);
       data.append("profileImage", formData.profileImage);
 
-      const response = await axios.post("http://localhost:5001/api/UploadUserDetails", data, {
+      const response = await axios.post("http://localhost:5001/api/uploadUserDetails", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -100,6 +100,8 @@ const MyProfile = () => {
       />
       <TextField
         label="Email (User ID)"
+        name="email"
+        type="email"
         variant="outlined"
         margin="normal"
         fullWidth

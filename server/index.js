@@ -3,12 +3,17 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+const uploadVideo = require("./src/routes/uploadVideo");
+const uploadUserDetails = require("./src/routes/user");
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use("/api/uploadVideo", uploadVideo);
+app.use("/api", uploadUserDetails); 
+
 
 // MongoDB Connection (Atlas)
 mongoose
@@ -19,26 +24,26 @@ mongoose
 // Define routes, models, etc. (as in previous example)
 // Define the User model
 // Define the User schema
-const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  middleName: { type: String },
-  lastName: { type: String, required: true },
-  dob: { type: Date, required: true },
-  email: { type: String, required: true, unique: true },
-});
+// const userSchema = new mongoose.Schema({
+//   firstName: { type: String, required: true },
+//   middleName: { type: String },
+//   lastName: { type: String, required: true },
+//   dob: { type: Date, required: true },
+//   email: { type: String, required: true, unique: true },
+// });
 
-const User = mongoose.model("User", userSchema, "users");
+// const User = mongoose.model("User", userSchema, "users");
 
-// API Endpoint to save user profile
-app.post("/api/users", async (req, res) => {
-  try {
-    const user = new User(req.body);
-    await user.save();
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+// // API Endpoint to save user profile
+// app.post("/api/users", async (req, res) => {
+//   try {
+//     const user = new User(req.body);
+//     await user.save();
+//     res.status(201).json(user);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// });
 
 // Start Server
 app.listen(process.env.PORT, () => {
