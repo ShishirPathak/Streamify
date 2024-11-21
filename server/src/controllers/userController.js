@@ -3,7 +3,6 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const User = require("../models/userModel");
 
-
 require("dotenv").config();
 
 const app = express();
@@ -39,7 +38,7 @@ const uploadUserDetails = async (req, res) => {
       return res.status(500).json({ error: "Error uploading file to S3" });
     }
 
-    const { firstName, middleName, lastName, dob, email } = req.body;
+    const { firstName, middleName, lastName, dob, email, userId } = req.body;
     const profileImageUrl = req.file.location;
 
     try {
@@ -49,6 +48,7 @@ const uploadUserDetails = async (req, res) => {
         lastName,
         dob,
         email,
+        userId,
         profileImageUrl,
       });
 
@@ -61,4 +61,22 @@ const uploadUserDetails = async (req, res) => {
   });
 };
 
-module.exports = { uploadUserDetails };
+const getUserDetails = async (req, res) => {
+  try {
+    const email = req.params.email; // Assuming the email is provided as a URL parameter
+
+    const user = await User.findOne({ email: email }); // Find user by email
+
+    if (user) {
+      res.status(200).json(user); // Respond with user details if found
+    } else {
+      res.status(404).json({ message: "User not found" }); // User not found
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching user details", error: error.message }); // Error handling
+  }
+};
+
+module.exports = { uploadUserDetails, getUserDetails };

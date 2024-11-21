@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Input } from "@mui/material";
 import axios from "axios";
+import { AuthContext } from '../context/AuthContext'
+import { useContext } from "react";
 
 const MyProfile = () => {
   const [formData, setFormData] = useState({
@@ -8,11 +10,14 @@ const MyProfile = () => {
     middleName: "",
     lastName: "",
     dob: "",
+    userId:"",
     profileImage: null,
   });
 
+  const { user, userDetails } = useContext(AuthContext);
+
   // Fetch user email from local storage or set a default for testing
-  const email = localStorage.getItem("userEmail") || "example@example.com";
+  // const email = localStorage.getItem("userEmail") || "example@example.com";
 
   const handleFileChange = (e) => {
     setFormData({ ...formData, profileImage: e.target.files[0] });
@@ -30,10 +35,11 @@ const MyProfile = () => {
       data.append("middleName", formData.middleName);
       data.append("lastName", formData.lastName);
       data.append("dob", formData.dob);
-      data.append("email", formData.email);
+      data.append("email", user.email);
       data.append("profileImage", formData.profileImage);
+      data.append("userId", formData.userId);
 
-      const response = await axios.post("http://localhost:5001/api/uploadUserDetails", data, {
+      const response = await axios.post("http://localhost:5001/api/UploadUserDetails", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -99,13 +105,21 @@ const MyProfile = () => {
         required
       />
       <TextField
-        label="Email (User ID)"
-        name="email"
-        type="email"
+        label="Email"
         variant="outlined"
         margin="normal"
         fullWidth
-        value={formData.email}
+        value={user?.email}
+        onChange={handleChange}
+        InputProps={{ readOnly: true }}
+      />
+        <TextField
+        label="User ID"
+        name="userId"
+        variant="outlined"
+        margin="normal"
+        fullWidth
+        value={user?.userId}
         onChange={handleChange}
 
         // InputProps={{ readOnly: true }}

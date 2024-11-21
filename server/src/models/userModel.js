@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   dob: { type: Date, required: true },
   email: { type: String, required: true, unique: true },
   profileImageUrl: { type: String }, // Store S3 image URL here
+  userId: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 

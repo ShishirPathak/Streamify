@@ -26,7 +26,8 @@ const settings = [
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user, userDetails } = useContext(AuthContext);
+  console.log("ResponsiveAppBar-userDetails", userDetails?.firstName);
   console.log("ResponsiveAppBar uid: " + user?.uid);
 
   const handleSignOut = async () => {
@@ -190,7 +191,7 @@ function ResponsiveAppBar() {
           {user && (
             <Box sx={{ flexGrow: 0 }}>
               <Chip
-                label={`Logged in user: ${user.email}`}
+                label={`Logged in user: ${userDetails?.userId}`}
                 color="purple"
                 variant="outlined"
                 sx={{ color: "white" }}
@@ -224,7 +225,7 @@ function ResponsiveAppBar() {
                     <Typography
                       component={Link}
                       to={path}
-                      sx={{ textAlign: "center", textDecoration:"none" }}
+                      sx={{ textAlign: "center", textDecoration: "none" }}
                     >
                       {name}
                     </Typography>

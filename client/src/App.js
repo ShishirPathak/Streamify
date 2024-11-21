@@ -15,16 +15,16 @@ function App() {
   return (
     <>
       <AuthProvider>
-        <ResponsiveAppBar />
-        <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signout" element={<SignOut />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/my-videos" element={<MyVideos />} />
-          <Route path="/upload-videos" element={<UploadVideos />} />
-          <Route path="/myprofile" element={<MyProfile />} />
-        </Routes>
+          <ResponsiveAppBar />
+          <Routes>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signout" element={<SignOut />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/my-videos" element={<MyVideos />} />
+            <Route path="/upload-videos" element={<UploadVideos />} />
+            <Route path="/myprofile" element={<MyProfile />} />
+          </Routes>
       </AuthProvider>
     </>
   );
