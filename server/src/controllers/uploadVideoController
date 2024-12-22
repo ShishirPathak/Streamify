@@ -37,14 +37,16 @@ let upload = multer({
       console.error("S3 Upload Error:", err);
       return res.status(500).json({ error: "Error uploading file to S3" });
     }
-    const { title, description, userId } = req.body;
+    const { title, description, userId, category, email } = req.body;
     const videoUrl = req.file.location;
 
     const uploadVideoModel = new UploadVideoModel({
       title,
       description,
       videoUrl,
-      userId
+      userId,
+      category,
+      email
       
     });
     await uploadVideoModel.save();

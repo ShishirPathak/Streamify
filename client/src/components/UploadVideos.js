@@ -28,7 +28,7 @@
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
-    
+
 //     const data = new FormData();
 //     data.append("title", formData.title);
 //     data.append("description", formData.description);
@@ -95,15 +95,22 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { FormControl, FormLabel, Box } from "@mui/material";
+import { FormControl, FormLabel, Box, Select, MenuItem } from "@mui/material";
 import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+
 
 function UploadVideos() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     file: null,
+    category: "",
   });
+
+  const { userDetails } = useContext(AuthContext);  // Get the authenticated user from AuthContext
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -122,7 +129,7 @@ function UploadVideos() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Make sure a file is selected
     if (!formData.file) {
       alert("Please select a file to upload");
@@ -133,14 +140,20 @@ function UploadVideos() {
     data.append("title", formData.title);
     data.append("description", formData.description);
     data.append("file", formData.file); // Ensure the key matches the server's expected field name
-    data.append("userId","pathakshishir123@gmail.com")
+    data.append("category", formData.category);
+    data.append("userId", userDetails.userId);
+    data.append("email", userDetails.email);
 
     try {
-      const response = await axios.post("http://localhost:5001/api/uploadVideo", data, {
-        headers: {
-          "Content-Type": "multipart/form-data", // axios should set this automatically, but it's good to ensure it's correct
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5001/api/uploadVideo",
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // axios should set this automatically, but it's good to ensure it's correct
+          },
+        }
+      );
       alert("Video uploaded successfully!");
       console.log(response.data);
     } catch (error) {
@@ -150,7 +163,11 @@ function UploadVideos() {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, mx: "auto" }}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ maxWidth: 400, mx: "auto" }}
+    >
       <FormControl fullWidth margin="normal">
         <FormLabel>Video Title</FormLabel>
         <TextField
@@ -161,6 +178,26 @@ function UploadVideos() {
           onChange={handleInputChange}
           required
         />
+      </FormControl>
+      <FormControl fullWidth margin="normal">
+        <FormLabel>Video Category</FormLabel>
+        <Select
+          name="category"
+          value={formData.category}
+          onChange={handleInputChange}
+          required
+        >
+          <MenuItem value="Music">Music</MenuItem>
+          <MenuItem value="Sports">Sports</MenuItem>
+          <MenuItem value="Documentaries">Documentaries</MenuItem>
+          <MenuItem value="Education">Education</MenuItem>
+          <MenuItem value="Entertainment">Entertainment</MenuItem>
+          <MenuItem value="News">News</MenuItem>
+          <MenuItem value="Cooking">Cooking</MenuItem>
+          <MenuItem value="Tech">Tech</MenuItem>
+          <MenuItem value="Lifestyle">Lifestyle</MenuItem>
+          <MenuItem value="Travel">Travel</MenuItem>
+        </Select>
       </FormControl>
       <FormControl fullWidth margin="normal">
         <FormLabel>Video Description</FormLabel>
@@ -191,4 +228,3 @@ function UploadVideos() {
 }
 
 export default UploadVideos;
-

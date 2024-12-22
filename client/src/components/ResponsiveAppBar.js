@@ -98,7 +98,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component={Link}
-            to={"./"}
+            to={"./dashboard"}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },

@@ -1,32 +1,49 @@
-import React from 'react'
-import ReactPlayer from 'react-player'
-// function MyVideos() {
-//   return (
-//     <div>MyVideos
-//       <ReactPlayer url='https://dmsqwaod139y1.cloudfront.net/videos/1731360620348_mp4file_ex1.mp4' />
-//     </div>
-    
-//   )
-// }
+import React, { useEffect, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { Card, CardContent, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react';
 
-// export default MyVideos
+import axios from 'axios';
 
 const MyVideos = () => {
-  const videoUrl =
-    "https://dmsqwaod139y1.cloudfront.net/videos/1731360620348_mp4file_ex1.mp4";
+  const [videos, setVideos] = useState([]);
+  const { user } = useContext(AuthContext);  // Get the authenticated user from AuthContext
+
+  useEffect(() => {
+    // Replace with your email
+    const email = 'pathakshishir123@gmail.com';
+    axios.get(`http://localhost:5001/api/getVideoDetails/${user.email}`)
+      .then(res => {
+        setVideos(res.data);
+      })
+      .catch(err => console.error(err));
+  }, []);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-      <ReactPlayer
-        url={videoUrl}
-        controls={true} // Show player controls (play, pause, volume, etc.)
-        width="640px"   // Width of the player
-        height="360px"  // Height of the player
-        onProgress={(progress) => console.log("Progress:", progress)} // Log progress events
-        onPlay={() => console.log("Video is playing")} // Handle play event
-        onPause={() => console.log("Video is paused")} // Handle pause event
-      />
-    </div>
+    <Grid container spacing={2} style={{ padding: '20px' }}>
+      {videos.map(video => (
+        <Grid size={3} item xs={12} sm={6} md={4} key={video._id}>
+          <Card style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <ReactPlayer
+              url={video.videoUrl}
+              controls={true}
+              width="100%"
+              height="auto"
+            />
+            <CardContent style={{ flexGrow: 1 }}>
+              <Typography variant="h6" component="div">
+                {video.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {video.description}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 
