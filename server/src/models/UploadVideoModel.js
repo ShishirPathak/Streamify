@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const videoSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
   title: { type: String, required: true }, // Video title
   description: { type: String, required: true }, // Video description
   videoUrl: { type: String, required: true }, // URL to the video stored in S3
@@ -8,7 +9,7 @@ const videoSchema = new mongoose.Schema({
   email: { type: String, required: true }, // email of the uploader
   createdAt: { type: Date, default: Date.now },
   modifiedAt: { type: Date, default: Date.now },
-  category: {type: String, required: true}
+  category: { type: String, required: true },
 });
 
 const UploadVideoModel = mongoose.model("Video", videoSchema, "videos");

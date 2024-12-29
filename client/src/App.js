@@ -10,6 +10,7 @@ import ResponsiveAppBar from "./components/ResponsiveAppBar";
 import { AuthProvider } from "./context/AuthContext";
 import SignOut from "./components/SignOut";
 import MyProfile from "./components/MyProfile";
+import VideoPlayer from "./components/VideoPlayer";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/my-videos" element={<MyVideos />} />
             <Route path="/upload-videos" element={<UploadVideos />} />
             <Route path="/myprofile" element={<MyProfile />} />
+            <Route path="/video/:id" Component={VideoPlayer}></Route>
           </Routes>
       </AuthProvider>
     </>
