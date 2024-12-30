@@ -201,7 +201,7 @@ function ResponsiveAppBar() {
                   onClick={handleOpenUserMenu}
                   sx={{ p: 0, ml: "12px" }}
                 >
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt="Remy Sharp" src={userDetails?.profileImageUrl} />
                 </IconButton>
               </Tooltip>
               <Menu

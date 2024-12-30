@@ -1,4 +1,4 @@
-const VideoModel = require("../models/UploadVideoModel");
+const VideoModel = require("../models/VideoModel");
 
 const getAllVideo = async (req, res) => {
   try {

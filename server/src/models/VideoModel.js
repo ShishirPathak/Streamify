@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 
+const commentSchema = new mongoose.Schema({
+  userId: String,
+  comment: String,
+  createdAt: { type: Date, default: Date.now },
+});
+
 const videoSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   title: { type: String, required: true }, // Video title
@@ -10,8 +16,11 @@ const videoSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   modifiedAt: { type: Date, default: Date.now },
   category: { type: String, required: true },
+  likes: { type: Number, default: 0 },
+  dislikes: { type: Number, default: 0 },
+  comments: [commentSchema],
 });
 
-const UploadVideoModel = mongoose.model("Video", videoSchema, "videos");
+const VideoModel = mongoose.model("Video", videoSchema, "videos");
 
-module.exports = UploadVideoModel;
+module.exports = VideoModel;

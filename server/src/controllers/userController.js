@@ -39,7 +39,14 @@ const uploadUserDetails = async (req, res) => {
     }
 
     const { firstName, middleName, lastName, dob, email, userId } = req.body;
-    const profileImageUrl = req.file.location;
+    var profileImageUrl = "";
+
+    if (req.file && req.file.location) {
+      profileImageUrl = req.file.location;
+    } else {
+      profileImageUrl = 'https://i.pravatar.cc/300'; 
+    }
+
 
     try {
       const newUser = new User({

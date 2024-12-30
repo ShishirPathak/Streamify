@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 const uploadVideo = require("./src/routes/uploadVideo");
 const uploadUserDetails = require("./src/routes/user");
-const getAllVideo = require("./src/routes/getVideo");
+const videoRoute = require("./src/routes/videoRoute");
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/api", uploadVideo);
 app.use("/api", uploadUserDetails); 
-app.use("/api", getAllVideo); 
+app.use("/api", videoRoute); 
 
 
 // MongoDB Connection (Atlas)
