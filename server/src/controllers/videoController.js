@@ -1,4 +1,4 @@
-const VideoModel = require("../models/VideoModel");
+const VideoModel = require("../models/VideoModel.js");
 
 const likeVideo = async (req, res) => {
   console.log("likeVideo called with id: " + req.params.id);

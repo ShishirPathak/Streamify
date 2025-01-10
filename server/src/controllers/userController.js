@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const User = require("../models/userModel");
+const UserActionModel = require("../models/userActionModel");
+const VideoModel = require("../models/VideoModel");
 
 require("dotenv").config();
 
@@ -44,9 +46,8 @@ const uploadUserDetails = async (req, res) => {
     if (req.file && req.file.location) {
       profileImageUrl = req.file.location;
     } else {
-      profileImageUrl = 'https://i.pravatar.cc/300'; 
+      profileImageUrl = "https://i.pravatar.cc/300";
     }
-
 
     try {
       const newUser = new User({
@@ -86,4 +87,51 @@ const getUserDetails = async (req, res) => {
   }
 };
 
-module.exports = { uploadUserDetails, getUserDetails };
+const likeDislike = async (req, res) => {
+  const { userId, videoId, action } = req.body; // action can be 'like', 'dislike', or 'none'
+
+  // Find the existing user action
+  const userAction = await UserActionModel.findOne({ userId, videoId });
+
+  // If the user has not previously liked or disliked the video, create a new user action
+  if (!userAction) {
+    await UserActionModel.create({ userId, videoId, action });
+  } else {
+    // If the user has previously liked or disliked the video, update the user action
+    userAction.action = action;
+    await userAction.save();
+  }
+
+  // Update the like and dislike counts for the video
+  const likes = await UserActionModel.countDocuments({
+    videoId,
+    action: "like",
+  });
+  const dislikes = await UserActionModel.countDocuments({
+    videoId,
+    action: "dislike",
+  });
+  await VideoModel.updateOne({ _id: videoId }, { likes, dislikes });
+
+  res.send({ likes, dislikes });
+};
+
+const getUserAction = async (req, res) => {
+  const { videoId } = req.params;
+  const { userId } = req.query;
+  try {
+    const userAction = await UserActionModel.findOne({ userId, videoId });
+    if (userAction) {
+      res.json({ userAction: userAction});
+    } else {
+      res.json({ userAction: "none" });
+    }
+  } catch (error) {
+    console.error(error);
+    res
+      .json(500)
+      .json({ error: "An error occurred while fetching the user action" });
+  }
+};
+
+module.exports = { uploadUserDetails, getUserDetails, likeDislike, getUserAction };

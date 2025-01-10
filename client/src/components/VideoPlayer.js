@@ -5,7 +5,6 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
-
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
@@ -19,34 +18,46 @@ import Avatar from "@mui/material/Avatar";
 const VideoPlayer = () => {
   const [video, setVideo] = useState(null);
   const [comment, setComment] = useState("");
+  const [userAction, setUserAction] = useState("none"); // 'like', 'dislike', or 'none'
   const { id } = useParams();
   const { user, userDetails } = useContext(AuthContext);
 
   useEffect(() => {
+    // Fetch video data
     axios
       .get(`http://localhost:5001/api/getOneVideo/${id}`)
       .then((res) => {
         setVideo(res.data);
       })
       .catch((err) => console.error(err));
+
+    // Fetch user action data
+    axios
+      .get(
+        `http://localhost:5001/api/getUserAction/${id}?userId=${userDetails.userId}`
+      )
+      .then((res) => {
+        setUserAction(res.data.userAction.action);
+      })
+      .catch((err) => console.error(err));
   }, [id]);
 
-  const handleLike = () => {
+  const handleLikeDislike = (videoId, action) => {
     axios
-      .post(`http://localhost:5001/api/likeVideo/${id}`)
-      .then((res) => {
-        setVideo(res.data);
+      .post(`http://localhost:5001/api/likeDislike`, {
+        videoId: videoId,
+        userId: userDetails.userId,
+        action,
       })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const handleDislike = () => {
-    axios
-      .post(`http://localhost:5001/api/dislikeVideo/${id}`)
       .then((res) => {
-        setVideo(res.data);
+        // After a successful like/dislike, fetch the latest video data
+        axios
+          .get(`http://localhost:5001/api/getOneVideo/${videoId}`)
+          .then((res) => {
+            setVideo(res.data);
+          })
+          .catch((err) => console.error(err));
+        setUserAction(action);
       })
       .catch((err) => {
         console.error(err);
@@ -79,14 +90,30 @@ const VideoPlayer = () => {
         height="80%"
         style={{ marginTop: "2%", marginLeft: "10%" }}
       />
-      <Typography variant="h5" sx={{ mt: 2, ml: "10%" ,mb:2 }}>
+      <Typography variant="h5" sx={{ mt: 2, ml: "10%", mb: 2 }}>
         {video.title}
       </Typography>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2, ml: "10%" }}>
-        <Button variant="outlined" onClick={handleLike}>
+        <Button
+          variant="outlined"
+          onClick={() =>
+            handleLikeDislike(
+              video._id,
+              userAction === "like" ? "none" : "like"
+            )
+          }
+        >
           Like ({video.likes})
         </Button>
-        <Button variant="outlined" onClick={handleDislike}>
+        <Button
+          variant="outlined"
+          onClick={() =>
+            handleLikeDislike(
+              video._id,
+              userAction === "dislike" ? "none" : "dislike"
+            )
+          }
+        >
           Dislike ({video.dislikes})
         </Button>
       </Box>
