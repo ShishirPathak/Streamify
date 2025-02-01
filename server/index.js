@@ -6,6 +6,7 @@ require("dotenv").config();
 const uploadVideo = require("./src/routes/uploadVideo");
 const uploadUserDetails = require("./src/routes/user");
 const videoRoute = require("./src/routes/videoRoute");
+const redisRoute = require("./src/routes/configRedisRoutes");
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.use(bodyParser.json());
 app.use("/api", uploadVideo);
 app.use("/api", uploadUserDetails); 
 app.use("/api", videoRoute); 
-
+app.use("/api", redisRoute);
 
 // MongoDB Connection (Atlas)
 mongoose
