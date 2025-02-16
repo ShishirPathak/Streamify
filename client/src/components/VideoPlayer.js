@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import axios from "axios";
@@ -21,6 +21,23 @@ const VideoPlayer = () => {
   const [userAction, setUserAction] = useState("none"); // 'like', 'dislike', or 'none'
   const { id } = useParams();
   const { user, userDetails } = useContext(AuthContext);
+
+  const [sessionID] = useState(
+    () => "session_" + Math.random().toString(36).substring(2, 15)
+  );
+  const [hasCompleted, setHasCompleted] = useState(false);
+  const lastReportedTime = useRef(0);
+  const currentTimeRef = useRef(0);
+  const sendProgress = async (timestamp, eventType) => {
+    console.log("Sending progress:", timestamp, eventType);
+    await axios.post("http://localhost:5001/api/track-progress", {
+      videoId: id,
+      sessionId: sessionID,
+      timestamp,
+      eventType,
+      userId: userDetails.userId,
+    });
+  };
 
   useEffect(() => {
     // Fetch video data
@@ -85,6 +102,35 @@ const VideoPlayer = () => {
     <div>
       <ReactPlayer
         url={video.videoUrl}
+        onProgress={({ playedSeconds }) => {
+          currentTimeRef.current = playedSeconds;
+          const roundedPlayedSeconds = Math.floor(playedSeconds);
+          if (
+            roundedPlayedSeconds % 5 === 0 &&
+            roundedPlayedSeconds !== lastReportedTime.current
+          ) {
+            lastReportedTime.current = roundedPlayedSeconds;
+            sendProgress(roundedPlayedSeconds, "play");
+          }
+        }}
+        onPause={() =>
+          sendProgress(Math.floor(currentTimeRef.current), "pause")
+        }
+        onSeek={(seconds) => {
+          console.log("Seek event seconds:", seconds);
+          if (typeof seconds === "number" && !isNaN(seconds)) {
+            sendProgress(Math.floor(seconds), "rewind");
+          } else {
+            console.error("Invalid seconds value:", seconds);
+          }
+        }}
+        onEnded={() => {
+          sendProgress(Math.floor(currentTimeRef.current), "complete");
+          setHasCompleted(true);
+        }}
+        onPlay={() => {
+          if (hasCompleted) sendProgress(currentTimeRef.current, "replay");
+        }}
         controls={true}
         width="80%"
         height="80%"
