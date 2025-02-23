@@ -23,20 +23,31 @@ const VideoPlayer = () => {
   const { user, userDetails } = useContext(AuthContext);
 
   const [sessionID] = useState(
-    () => "session_" + Math.random().toString(36).substring(2, 15)
+    () =>  Math.random().toString(36).substring(2, 15)
   );
   const [hasCompleted, setHasCompleted] = useState(false);
   const lastReportedTime = useRef(0);
   const currentTimeRef = useRef(0);
-  const sendProgress = async (timestamp, eventType) => {
-    console.log("Sending progress:", timestamp, eventType);
+  const sendProgress = async (playedSeconds, eventType) => {
+    console.log("Sending progress:", playedSeconds, eventType);
     await axios.post("http://localhost:5001/api/track-progress", {
       videoId: id,
       sessionId: sessionID,
-      timestamp,
+      timestamp: new Date(),
+      playedSeconds,
       eventType,
       userId: userDetails.userId,
     });
+  };
+
+  const addToMongoDB = async (videoId) => {
+    console.log("Adding to MongoDB", videoId);
+    try {
+      await axios.post(`http://localhost:5001/api/add-to-mongodb/${videoId}`, {
+      });
+    } catch (error) {
+      console.error("Error sending to MongoDB:", error);
+    }
   };
 
   useEffect(() => {
@@ -119,13 +130,16 @@ const VideoPlayer = () => {
         onSeek={(seconds) => {
           console.log("Seek event seconds:", seconds);
           if (typeof seconds === "number" && !isNaN(seconds)) {
-            sendProgress(Math.floor(seconds), "rewind");
+            const direction = seconds > currentTimeRef.current ? "forward" : "rewind";
+            sendProgress(Math.floor(seconds), direction);
           } else {
             console.error("Invalid seconds value:", seconds);
           }
         }}
         onEnded={() => {
+          console.log("Video ended");
           sendProgress(Math.floor(currentTimeRef.current), "complete");
+          addToMongoDB(video._id)
           setHasCompleted(true);
         }}
         onPlay={() => {
