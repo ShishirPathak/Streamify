@@ -11,12 +11,14 @@ import { AuthProvider } from "./context/AuthContext";
 import SignOut from "./components/SignOut";
 import MyProfile from "./components/MyProfile";
 import VideoPlayer from "./components/VideoPlayer";
+import IdleTimeout from "./components/IdleTimeout";
 
 function App() {
   return (
     <>
       <AuthProvider>
           <ResponsiveAppBar />
+          <IdleTimeout />
           <Routes>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signout" element={<SignOut />} />
