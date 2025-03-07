@@ -37,6 +37,11 @@ const VideoPlayer = () => {
       playedSeconds,
       eventType,
       userId: userDetails.userId,
+    },{
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     });
   };
 
@@ -44,7 +49,10 @@ const VideoPlayer = () => {
     console.log("Adding to MongoDB", videoId);
     try {
       await axios.post(`http://localhost:5001/api/add-to-mongodb/${videoId}`, {
-      });
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+      }});
     } catch (error) {
       console.error("Error sending to MongoDB:", error);
     }
@@ -53,7 +61,12 @@ const VideoPlayer = () => {
   useEffect(() => {
     // Fetch video data
     axios
-      .get(`http://localhost:5001/api/getOneVideo/${id}`)
+      .get(`http://localhost:5001/api/getOneVideo/${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then((res) => {
         setVideo(res.data);
       })
@@ -62,12 +75,17 @@ const VideoPlayer = () => {
     // Fetch user action data
     axios
       .get(
-        `http://localhost:5001/api/getUserAction/${id}?userId=${userDetails.userId}`
+        `http://localhost:5001/api/getUserAction/${id}?userId=${userDetails.userId}`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }}
       )
       .then((res) => {
         setUserAction(res.data.userAction.action);
       })
       .catch((err) => console.error(err));
+      
   }, [id]);
 
   const handleLikeDislike = (videoId, action) => {

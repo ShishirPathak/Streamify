@@ -42,6 +42,7 @@ const MyProfile = () => {
       const response = await axios.post("http://localhost:5001/api/UploadUserDetails", data, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
         },
       });
 

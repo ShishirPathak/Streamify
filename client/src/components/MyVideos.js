@@ -16,7 +16,12 @@ const MyVideos = () => {
     // Replace with your email
     const email = "pathakshishir123@gmail.com";
     axios
-      .get(`http://localhost:5001/api/getAllVideo/${user.email}`)
+      .get(`http://localhost:5001/api/getAllVideo/${user.email}`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
       .then((res) => {
         setVideos(res.data);
       })

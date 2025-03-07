@@ -26,7 +26,12 @@ export const AuthProvider = ({ children }) => {
         const uid = user.uid;
         setUser(user);
         axios
-        .get(`http://localhost:5001/api/getUserDetails/${user.email}`)  // API call to fetch user details
+        .get(`http://localhost:5001/api/getUserDetails/${user.email}`,{
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })  // API call to fetch user details
         .then((response) => {
           console.log("response.data",response.data)
           setUserDetails(response.data);  // Set user details from API response

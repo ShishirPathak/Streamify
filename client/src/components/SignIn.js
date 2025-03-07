@@ -17,8 +17,12 @@ const SignIn = () => {
     e.preventDefault();
     setError('');
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      
+      const userCredentials =  await signInWithEmailAndPassword(auth, email, password);
+      // Get the token
+      const token = await userCredentials.user.getIdToken();
+      // store the token in local storage
+      localStorage
+        .setItem('token', token);
       // alert('Login Successful');
       // Redirect user or perform further actions
       navigate("/dashboard")

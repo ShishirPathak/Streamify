@@ -151,6 +151,7 @@ function UploadVideos() {
         {
           headers: {
             "Content-Type": "multipart/form-data", // axios should set this automatically, but it's good to ensure it's correct
+            "Authorization": `Bearer ${localStorage.getItem("token")}`, // Add the token to the headers
           },
         }
       );
