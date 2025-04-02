@@ -13,6 +13,7 @@ admin.initializeApp({
 // Middleware for checking Firebase ID token
 const checkAuth = async (req, res, next) => {
       // Check if the authorization header is present
+      // console.log("req.headers: "+ String(req.headers.authorization));
     if (!req.headers) {
         return res.status(401).send('Authorization header not provided');
       }

@@ -15,12 +15,15 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
 
+import { useLocation } from "react-router-dom";
+
 const VideoPlayer = () => {
   const [video, setVideo] = useState(null);
   const [comment, setComment] = useState("");
   const [userAction, setUserAction] = useState("none"); // 'like', 'dislike', or 'none'
   const { id } = useParams();
   const { user, userDetails } = useContext(AuthContext);
+  const location = useLocation();
 
   const [sessionID] = useState(
     () =>  Math.random().toString(36).substring(2, 15)
@@ -48,15 +51,27 @@ const VideoPlayer = () => {
   const addToMongoDB = async (videoId) => {
     console.log("Adding to MongoDB", videoId);
     try {
-      await axios.post(`http://localhost:5001/api/add-to-mongodb/${videoId}`, {
+      await axios.post(`http://localhost:5001/api/add-to-mongodb/${videoId}`, 
+      {
+      },{
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-      }});
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
     } catch (error) {
       console.error("Error sending to MongoDB:", error);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      console.log("🔁 Route changed or component unmounted");
+      sendProgress(Math.floor(currentTimeRef.current), "exit");
+      addToMongoDB(id);
+    };
+  }, [location.pathname]);
+  
 
   useEffect(() => {
     // Fetch video data

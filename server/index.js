@@ -21,12 +21,15 @@ app.get('/api/project-health', function (req, res) {
 })
 
 
+// app.use("/api", uploadVideo);
+// app.use("/api", uploadUserDetails); 
+// app.use("/api", videoRoute); 
+// app.use("/api", redisRoute);
+
 app.use("/api", checkAuth, uploadVideo);
 app.use("/api", checkAuth, uploadUserDetails); 
 app.use("/api", checkAuth, videoRoute); 
 app.use("/api", checkAuth, redisRoute);
-
-
 
 // MongoDB Connection (Atlas)
 mongoose
