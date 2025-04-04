@@ -14,20 +14,20 @@ admin.initializeApp({
 const checkAuth = async (req, res, next) => {
       // Check if the authorization header is present
       // console.log("req.headers: "+ String(req.headers.authorization));
-    if (!req.headers) {
-        return res.status(401).send('Authorization header not provided');
+    try{
+      try {
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        req.user = decodedToken;
+        next();
+      } catch (error) {
+        console.error('Error while verifying Firebase ID token:', error);
+        res.status(401).send('Unauthorized');
       }
-    const idToken = req.headers.authorization.split('Bearer ')[1];
-
-
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-    req.user = decodedToken;
-    next();
-  } catch (error) {
-    console.error('Error while verifying Firebase ID token:', error);
-    res.status(401).send('Unauthorized');
-  }
+    }
+    catch (error) {
+      console.error('Error in checkAuth middleware:', error);
+      res.status(500).send('Internal Server Error');
+    }
 };
 
 module.exports = checkAuth;

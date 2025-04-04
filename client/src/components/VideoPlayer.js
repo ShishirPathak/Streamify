@@ -14,6 +14,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
+import EngagementGraph from "./EngagementGraph";
+import ViewerRetentionGraph from "./ViewerRetentionGraph";
 
 import { useLocation } from "react-router-dom";
 
@@ -24,6 +26,9 @@ const VideoPlayer = () => {
   const { id } = useParams();
   const { user, userDetails } = useContext(AuthContext);
   const location = useLocation();
+
+  const [showAnalytics, setShowAnalytics] = useState(false);
+
 
   const [sessionID] = useState(
     () =>  Math.random().toString(36).substring(2, 15)
@@ -210,6 +215,21 @@ const VideoPlayer = () => {
           Dislike ({video.dislikes})
         </Button>
       </Box>
+      <Box sx={{ ml: "10%", mt: 2 }}>
+  <Button
+    variant="outlined"
+    onClick={() => setShowAnalytics(!showAnalytics)}
+  >
+    {showAnalytics ? "Hide Analytics" : "Show Analytics"}
+  </Button>
+
+  {showAnalytics && (
+    <Box sx={{ mt: 2, width: "90%" }}>
+      <EngagementGraph videoId={video._id} />
+    </Box>
+  )}
+</Box>
+
       <Box sx={{ display: "flex", alignItems: "center", gap: 4, ml: "10%" }}>
         <TextField
           fullWidth

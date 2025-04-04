@@ -8,7 +8,7 @@ const uploadUserDetails = require("./src/routes/user");
 const videoRoute = require("./src/routes/videoRoute");
 const redisRoute = require("./src/routes/configRedisRoutes");
 const checkAuth = require("./src/middleware/checkAuth");
-
+const engagementRoute = require("./src/routes/engagementRoute");
 const app = express();
 
 // Middleware
@@ -20,16 +20,18 @@ app.get('/api/project-health', function (req, res) {
   res.send('Hello World! API is working fine on port: ' + process.env.PORT);
 })
 
+app.use("/api", engagementRoute);
 
-// app.use("/api", uploadVideo);
-// app.use("/api", uploadUserDetails); 
-// app.use("/api", videoRoute); 
-// app.use("/api", redisRoute);
 
-app.use("/api", checkAuth, uploadVideo);
-app.use("/api", checkAuth, uploadUserDetails); 
-app.use("/api", checkAuth, videoRoute); 
-app.use("/api", checkAuth, redisRoute);
+app.use("/api", uploadVideo);
+app.use("/api", uploadUserDetails); 
+app.use("/api", videoRoute); 
+app.use("/api", redisRoute);
+
+// app.use("/api", checkAuth, uploadVideo);
+// app.use("/api", checkAuth, uploadUserDetails); 
+// app.use("/api", checkAuth, videoRoute); 
+// app.use("/api", checkAuth, redisRoute);
 
 // MongoDB Connection (Atlas)
 mongoose

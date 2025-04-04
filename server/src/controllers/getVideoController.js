@@ -3,8 +3,8 @@ const VideoModel = require("../models/VideoModel");
 const getAllVideo = async (req, res) => {
   try {
     const email = req.params.email;
-    const videoDetails = await VideoModel.find({ email: email });
-
+    // const videoDetails = await VideoModel.find({ email: email });
+    const videoDetails = await VideoModel.find();
     if (videoDetails) {
       console.log("getAllVideo");
       res.status(200).json(videoDetails);

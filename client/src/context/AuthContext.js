@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
         setUser(user);
+        console.log("localStorage.getItem: ",localStorage.getItem("token"))
         axios
         .get(`http://localhost:5001/api/getUserDetails/${user.email}`,{
           headers: {
