@@ -1,56 +1,110 @@
-import React from 'react';
-import { Grid2 as Grid, Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
-import { useContext } from 'react';
-import { AuthContext } from "../context/AuthContext";
+import React, { useContext } from 'react';
+import {
+  Container,
+  Typography,
+  Button,
+  Box,
+  Grid,
+  Card,
+  CardContent
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+
+const features = [
+  {
+    title: "Upload & Stream",
+    desc: "Creators can upload high-quality videos and stream them instantly to viewers.",
+  },
+  {
+    title: "Engagement Graph",
+    desc: "Visualize viewer engagement in real-time — know where users rewind, skip or drop off.",
+  },
+  {
+    title: "Replay vs Forward Insights",
+    desc: "Track key moments in your content with dual-line behavioral graphs.",
+  },
+  {
+    title: "Drop-off Detection",
+    desc: "Find out exactly where you're losing audience attention.",
+  },
+];
 
 const Dashboard = () => {
+  const { userDetails } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const { user, userDetails } = useContext(AuthContext);
-
-  if (!user) {
-    return <p>You are not logged in.</p>;
-  }
-
-  // Dummy data with different image URLs
-  const dummyData = Array(12).fill().map((_, index) => ({
-    title: 'Dummy Video',
-    description: 'This is a dummy video.',
-    imageUrl: `https://picsum.photos/seed/${index}/300`,
-  }));
+  const handleGetStarted = () => {
+    navigate('/my-videos');
+  };
 
   return (
-    <Box sx={{ bgcolor: '#000', color: '#fff', p: 2 }}>
-      {/* Welcome Header */}
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" align="center">
-          Welcome {userDetails ? userDetails.firstName : 'loading...'} to the STREAMIFY Application !!!
+    <div>
+      {/* Hero Section */}
+      <Box sx={{ backgroundColor: "#1e40af", color: "#fff", py: 8, textAlign: "center" }}>
+        <Typography variant="h3" fontWeight="bold">
+          Streamify
         </Typography>
+        <Typography variant="h6" sx={{ mt: 1 }}>
+          {userDetails?.firstName
+            ? `Welcome, ${userDetails.firstName}!`
+            : 'Your all-in-one video platform with advanced viewer analytics'}
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={handleGetStarted}
+          sx={{ mt: 4, bgcolor: "#f59e0b", color: "#000", fontWeight: "bold" }}
+        >
+          Get Started
+        </Button>
       </Box>
 
-      {/* Video Grid */}
-      <Grid container spacing={3}>
-        {dummyData.map((video, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-            <Card sx={{ bgcolor: '#333', color: '#fff' }}>
-              <CardMedia
-                component="img"
-                height="140"
-                image={video.imageUrl}
-                alt={video.title}
-              />
-              <CardContent>
-                <Typography variant="h6" component="div">
-                  {video.title}
-                </Typography>
-                <Typography variant="body2">
-                  {video.description}
-                </Typography>
-              </CardContent>
-            </Card>
+      {/* Features Section */}
+      <Container sx={{ py: 6 }}>
+        <Typography variant="h4" textAlign="center" fontWeight="bold" gutterBottom>
+          Features
+        </Typography>
+        <Grid container spacing={4}>
+          {features.map((feature, index) => (
+            <Grid item xs={12} md={6} key={index}>
+              <Card elevation={2}>
+                <CardContent>
+                  <Typography variant="h6" fontWeight="bold">
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 1 }}>
+                    {feature.desc}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+
+      {/* How It Works Section */}
+      <Box sx={{ backgroundColor: "#f1f5f9", py: 6 }}>
+        <Container>
+          <Typography variant="h4" textAlign="center" fontWeight="bold" gutterBottom>
+            How It Works
+          </Typography>
+          <Grid container spacing={4} justifyContent="center">
+            <Grid item xs={12} md={4}>
+              <Typography fontWeight="bold" variant="subtitle1">1. Sign Up & Upload</Typography>
+              <Typography>Creators register and upload their videos to Streamify.</Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography fontWeight="bold" variant="subtitle1">2. Watch & Track</Typography>
+              <Typography>Engagement events (play, pause, rewind, skip) are tracked in real-time.</Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography fontWeight="bold" variant="subtitle1">3. Analyze & Improve</Typography>
+              <Typography>Visual dashboards provide insights to optimize content strategy.</Typography>
+            </Grid>
           </Grid>
-        ))}
-      </Grid>
-    </Box>
+        </Container>
+      </Box>
+    </div>
   );
 };
 
