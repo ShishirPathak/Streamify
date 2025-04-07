@@ -88,13 +88,44 @@
 //   );
 // };
 
-// export default EngagementGraph;
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  CartesianGrid, Label, ReferenceDot, Area
+  LineChart,
+  Line,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  Label,
+  ReferenceDot,
 } from "recharts";
+// ✅ Dummy engagement data
+
+// const sampleEngagementData = [
+//   { time: 0, retained: 100 },
+//   { time: 10, retained: 95 },
+//   { time: 20, retained: 88 },
+//   { time: 30, retained: 80 },
+//   { time: 40, retained: 70 },
+//   { time: 50, retained: 60 },
+//   { time: 60, retained: 72, drop_off: false }, // 🔁 Replay spike
+//   { time: 70, retained: 68 },
+//   { time: 80, retained: 55, skipped: true },
+//   { time: 90, retained: 50 },
+//   { time: 100, retained: 48 },
+//   { time: 110, retained: 42 },
+//   { time: 120, retained: 35, drop_off: true }, // 🚨 Drop-off zone
+//   { time: 130, retained: 22 },
+//   { time: 140, retained: 15, skipped: true },
+//   { time: 150, retained: 10 },
+//   { time: 160, retained: 6 },
+//   { time: 170, retained: 4 },
+//   { time: 180, retained: 2 },
+// ];
+
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload?.length) {
@@ -118,24 +149,62 @@ const EngagementGraph = ({ videoId }) => {
     axios
       .get(`http://localhost:5001/api/engagement/${videoId}`)
       .then((res) => setData(res.data))
-      .catch((err) => console.error("Retention fetch error", err));
+      .catch((err) => console.error("Engagement fetch error", err));
   }, [videoId]);
 
-  if (!data.length) return <p style={{ marginLeft: "10%" }}>No retention data available.</p>;
+  // useEffect(() => {
+  //   // Simulate API call delay with dummy data
+  //   const timer = setTimeout(() => {
+  //     setData(sampleEngagementData);
+  //   }, 500); // 0.5s delay to simulate fetch
+  //   return () => clearTimeout(timer);
+  // }, []);
+  // useEffect(() => {
+  //   const dummy = [];
+  //   let retained = 100;
+  
+  //   for (let i = 0; i <= 200; i++) {
+  //     // Drop off in the beginning
+  //     if (i < 30) retained -= Math.random() * 1.2;
+  
+  //     // Mid video dip
+  //     else if (i >= 30 && i <= 120) retained -= Math.random() * 0.3;
+  
+  //     // Random re-engagement spike
+  //     if (i === 60 || i === 150) retained += Math.random() * 10;
+  
+  //     // Last 20 seconds sharp drop
+  //     if (i >= 180) retained -= Math.random() * 4;
+  
+  //     retained = Math.max(0, Math.min(100, retained)); // clamp
+  
+  //     dummy.push({
+  //       time: i,
+  //       retained: +retained.toFixed(2),
+  //       drop_off: i % 47 === 0,
+  //       skipped: i % 37 === 0,
+  //     });
+  //   }
+  
+  //   setData(dummy);
+  // }, []);
+
+  if (!data.length) return <p style={{ marginLeft: "1%" }}>No retention data available.</p>;
 
   return (
-    <div style={{ width: "90%", marginLeft: "10%", marginTop: "2rem" }}>
+    <div style={{ width: "90%", marginLeft: "1%", marginTop: "2rem" }}>
       <h3>Viewer Retention Graph</h3>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
           <defs>
-            <linearGradient id="heatGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#60a5fa" stopOpacity={0.4} />
-              <stop offset="100%" stopColor="#60a5fa" stopOpacity={0.05} />
+            <linearGradient id="retentionGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.4} />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.05} />
             </linearGradient>
           </defs>
 
           <CartesianGrid strokeDasharray="3 3" />
+
           <XAxis dataKey="time">
             <Label value="Time (seconds)" position="insideBottom" offset={-5} />
           </XAxis>
@@ -143,25 +212,27 @@ const EngagementGraph = ({ videoId }) => {
             <Label value="Retention (%)" angle={-90} position="insideLeft" />
           </YAxis>
 
-          {/* Heat-style area below the retention line */}
+          {/* ✅ Smooth fill under the line */}
           <Area
-            type="monotone"
+            type="natural"
             dataKey="retained"
             stroke="none"
-            fill="url(#heatGradient)"
+            fill="url(#retentionGradient)"
             fillOpacity={1}
+            isAnimationActive={false}
           />
 
-          {/* Retention line chart on top */}
+          {/* ✅ ECG-style smooth line */}
           <Line
-            type="monotone"
+            type="natural"
             dataKey="retained"
             stroke="#1e40af"
             strokeWidth={2}
             dot={false}
+            isAnimationActive={false}
           />
 
-          {/* Drop-off red dots */}
+          {/* 🔴 Drop-off markers */}
           {data
             .filter((d) => d.drop_off)
             .map((d, i) => (
@@ -189,4 +260,6 @@ const EngagementGraph = ({ videoId }) => {
 };
 
 export default EngagementGraph;
+
+
 

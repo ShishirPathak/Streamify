@@ -15,9 +15,10 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
 import EngagementGraph from "./EngagementGraph";
-import ViewerRetentionGraph from "./ViewerRetentionGraph";
+import ReplayForwardTimeline  from "./ReplayForwardTimeline";
 
 import { useLocation } from "react-router-dom";
+import MostRewatchedMoments from "./MostRewatchedMoments";
 
 const VideoPlayer = () => {
   const [video, setVideo] = useState(null);
@@ -226,6 +227,9 @@ const VideoPlayer = () => {
   {showAnalytics && (
     <Box sx={{ mt: 2, width: "90%" }}>
       <EngagementGraph videoId={video._id} />
+          {/* 👇 Add below this */}
+    <ReplayForwardTimeline videoId={video._id} />
+    <MostRewatchedMoments videoId={video._id} />
     </Box>
   )}
 </Box>
