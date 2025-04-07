@@ -44,7 +44,7 @@ const MostRewatchedTimeline = ({ videoId }) => {
     <div style={{ width: "90%", marginLeft: "1%", marginTop: "2rem", marginBottom: "4rem" }}>
       <h3>Most Rewatched Timeline (Heatmap)</h3>
 
-      <ResponsiveContainer width="100%" height={200}>
+      <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data} barCategoryGap={0}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis dataKey="time" interval={Math.floor(data.length / 10)}>

@@ -226,10 +226,11 @@ const VideoPlayer = () => {
 
   {showAnalytics && (
     <Box sx={{ mt: 2, width: "90%" }}>
-      <EngagementGraph videoId={video._id} />
+      <MostRewatchedMoments videoId={video._id} />
           {/* 👇 Add below this */}
     <ReplayForwardTimeline videoId={video._id} />
-    <MostRewatchedMoments videoId={video._id} />
+    <EngagementGraph videoId={video._id} />
+
     </Box>
   )}
 </Box>

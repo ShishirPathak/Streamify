@@ -3,9 +3,7 @@ const VideoEventSchema = require("../models/VideoEventSchema");
 const engagement = async (req, res) => {
   try {
     const { videoId } = req.params;
-    const events = await VideoEventSchema.find({ videoId }).sort({
-      timestamp: 1,
-    });
+    const events = await VideoEventSchema.find({ videoId }).sort({ timestamp: 1 });
 
     const sessions = {};
     events.forEach((e) => {
@@ -20,7 +18,7 @@ const engagement = async (req, res) => {
     const retention = {};
     const skipMap = {};
     const dropOffs = new Set();
-    const videoLength = 180;
+    const videoLength = 192; // or set dynamically
 
     Object.values(sessions).forEach((events) => {
       const watched = new Set();
@@ -40,8 +38,21 @@ const engagement = async (req, res) => {
           }
           lastPlayed = jumpTo;
         } else if (e.type === "complete") {
-          lastPlayed = videoLength;
-          watched.add(videoLength); // ✅ Fix: Count final second only if user completed
+          // Only count completion if the user watched the final 5 seconds before ending
+          const endThreshold = videoLength - 5;
+          let watchedFinalChunk = false;
+        
+          for (let sec = endThreshold; sec < videoLength; sec++) {
+            if (watched.has(sec)) {
+              watchedFinalChunk = true;
+              break;
+            }
+          }
+        
+          if (watchedFinalChunk) {
+            watched.add(videoLength);
+            lastPlayed = videoLength;
+          }
         }
       }
 
@@ -49,25 +60,25 @@ const engagement = async (req, res) => {
         retention[sec] = (retention[sec] || 0) + 1;
       });
 
-      if (
-        !events.some((e) => e.type === "complete") &&
-        lastPlayed < videoLength - 1
-      ) {
+      if (!sorted.some((e) => e.type === "complete") && lastPlayed < videoLength - 5) {
         dropOffs.add(lastPlayed);
       }
     });
 
-    // Normalize retention values
-    const maxCount = Math.max(...Object.values(retention), 1);
+    // ✅ Normalize using base = retention[0] || retention[1] || fallback to max
+    const fallbackMax = Object.keys(retention).length
+      ? Math.max(...Object.values(retention))
+      : 1;
+    const base = retention[0] || retention[1] || fallbackMax;
+
     const normalized = {};
     Object.keys(retention).forEach((sec) => {
-      normalized[+sec] = +((retention[sec] / maxCount) * 100).toFixed(2);
+      const value = (retention[sec] / base) * 100;
+      normalized[+sec] = Math.min(+value.toFixed(2), 100);
     });
 
-    // Interpolate missing seconds
-    const allSecs = Object.keys(normalized)
-      .map(Number)
-      .sort((a, b) => a - b);
+    // 🧮 Interpolate missing values
+    const allSecs = Object.keys(normalized).map(Number).sort((a, b) => a - b);
     const interpolated = {};
 
     for (let i = 0; i < allSecs.length - 1; i++) {
@@ -75,17 +86,18 @@ const engagement = async (req, res) => {
       const end = allSecs[i + 1];
       const startVal = normalized[start];
       const endVal = normalized[end];
+
       for (let t = start; t < end; t++) {
         const ratio = (t - start) / (end - start);
         interpolated[t] = +(startVal * (1 - ratio) + endVal * ratio).toFixed(2);
       }
     }
 
-    // Add the final point
+    // Add the last second
     interpolated[allSecs[allSecs.length - 1]] =
       normalized[allSecs[allSecs.length - 1]];
 
-    // Format final output
+    // 🟦 Final response format
     const result = Object.keys(interpolated).map((sec) => ({
       time: +sec,
       retained: interpolated[sec],

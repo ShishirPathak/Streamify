@@ -46,7 +46,7 @@ function ResponsiveAppBar() {
   };
 
   const pages = [
-    { name: "Home", path: "/" },
+    { name: "Home", path: "/dashboard" },
     ...(user
       ? [
           { name: "My Videos", path: "/my-videos" },

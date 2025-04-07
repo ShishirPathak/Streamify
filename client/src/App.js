@@ -11,6 +11,7 @@ import { AuthProvider } from "./context/AuthContext";
 import SignOut from "./components/SignOut";
 import MyProfile from "./components/MyProfile";
 import VideoPlayer from "./components/VideoPlayer";
+import Footer from "./components/Footer";
 // import IdleTimeout from "./components/IdleTimeout";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Route path="/myprofile" element={<MyProfile />} />
             <Route path="/video/:id" Component={VideoPlayer}></Route>
           </Routes>
+          <Footer />
       </AuthProvider>
     </>
   );

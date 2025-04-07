@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         // User is signed out
         setUser(null);
+        setUserDetails(null);    
       }
     });
 
