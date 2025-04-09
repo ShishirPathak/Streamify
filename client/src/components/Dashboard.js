@@ -35,6 +35,10 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
+    if (!userDetails) {
+      navigate('/signin');
+      return;
+      } 
     navigate('/my-videos');
   };
 
@@ -50,13 +54,24 @@ const Dashboard = () => {
             ? `Welcome, ${userDetails.firstName}!`
             : 'Your all-in-one video platform with advanced viewer analytics'}
         </Typography>
-        <Button
-          variant="contained"
-          onClick={handleGetStarted}
-          sx={{ mt: 4, bgcolor: "#f59e0b", color: "#000", fontWeight: "bold" }}
-        >
-          Get Started
-        </Button>
+        {userDetails ? (
+  <Button
+    variant="contained"
+    onClick={handleGetStarted}
+    sx={{ mt: 4, bgcolor: "#f59e0b", color: "#000", fontWeight: "bold" }}
+  >
+    Get Started
+  </Button>
+) : (
+  <Button
+    variant="contained"
+    onClick={handleGetStarted}
+    sx={{ mt: 4, bgcolor: "#facc15", color: "#000", fontWeight: "bold" }}
+  >
+    Sign In to Get Started
+  </Button>
+)}
+
       </Box>
 
       {/* Features Section */}

@@ -3,7 +3,7 @@ import React from "react";
 import SignIn from "./components/SignIn";
 import MyVideos from "./components/MyVideos";
 import UploadVideos from "./components/UploadVideos";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Navigate, Routes, Route } from "react-router-dom";
 import SignUp from "./components/SignUp";
 import Dashboard from "./components/Dashboard";
 import ResponsiveAppBar from "./components/ResponsiveAppBar";
@@ -18,22 +18,21 @@ function App() {
   return (
     <>
       <AuthProvider>
-          <ResponsiveAppBar />
-          {/* <IdleTimeout /> */}
-          <Routes>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signout" element={<SignOut />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/my-videos" element={<MyVideos />} />
-            <Route path="/upload-videos" element={<UploadVideos />} />
-            <Route path="/myprofile" element={<MyProfile />} />
-            <Route path="/video/:id" Component={VideoPlayer}></Route>
-          </Routes>
-          <Footer />
+        <ResponsiveAppBar />
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Navigate to="/" replace />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signout" element={<SignOut />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/my-videos" element={<MyVideos />} />
+          <Route path="/upload-videos" element={<UploadVideos />} />
+          <Route path="/myprofile" element={<MyProfile />} />
+          <Route path="/video/:id" element={<VideoPlayer />} />
+        </Routes>
+        <Footer />
       </AuthProvider>
     </>
   );
 }
-
 export default App;
