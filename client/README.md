@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# 🎬 Streamify – Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Your all-in-one video platform with advanced viewer engagement analytics  
+> Built with **React.js**, **Material UI**, **Firebase Auth**, and **Recharts**
 
-## Available Scripts
+![React](https://img.shields.io/badge/React-18-blue) ![MUI](https://img.shields.io/badge/MUI-v5-blueviolet) ![Firebase](https://img.shields.io/badge/Firebase-Auth-yellow)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🚀 Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- 🔐 **Authentication** – Firebase-based login/signup
+- 📹 **React Player** – Video streaming with custom playback tracking
+- 📊 **Analytics Dashboard** – Recharts-based visual insights (retention, replays, heatmaps)
+- 💬 **Comments + Likes** – Social interaction under videos
+- 🎨 **Responsive Design** – Built with Material UI
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🔧 Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Layer     | Technology              |
+|-----------|--------------------------|
+| UI        | React + Material UI      |
+| Video     | ReactPlayer              |
+| Graphs    | Recharts                 |
+| Auth      | Firebase Authentication  |
+| API Calls | Axios                    |
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ Setup Instructions
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clone the repo  
+```bash
+git clone https://github.com/ShishirPathak/Streamify.git
+cd client
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Install dependencies  
+```bash
+npm install
+```
 
-### `npm run eject`
+3. Create `.env` file  
+```env
+REACT_APP_FIREBASE_API_KEY=your_key
+REACT_APP_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+REACT_APP_BACKEND_URL=http://localhost:5001
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+4. Run locally  
+```bash
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📁 Folder Structure
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+client/src/
+├── components/
+│   ├── EngagementGraph.jsx
+│   ├── ReplayForwardTimeline.jsx
+│   ├── MostRewatchedHeatmap.jsx
+├── pages/
+│   ├── Dashboard.jsx
+│   ├── MyVideos.jsx
+├── context/
+│   └── AuthContext.js
+├── App.js
+├── index.js
+```
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 📄 License
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT © Shishir Kumar Pathak
+University of Massachusetts Dartmouth

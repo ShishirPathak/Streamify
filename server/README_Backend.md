@@ -34,7 +34,7 @@
 
 1. Clone the repo  
 ```bash
-git clone https://github.com/ShishirPathak/Streamify.git
+git clone https://github.com/your-username/streamify.git
 cd server
 ```
 
@@ -100,5 +100,5 @@ server/
 
 ## 📝 License
 
-MIT © Shishir Kumar Pathak
-University of Massachusetts Dartmouth 
+MIT © Shishir Kumar  
+University of Massachusetts Dartmouth – Spring 2025
