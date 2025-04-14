@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
     if (user && user.email) {
       // Make sure user is authenticated and email is available
       axios
-        .get(`http://localhost:5001/api/getUserDetails/${user.email}`)  // API call to fetch user details
+        .get(`${process.env.REACT_APP_BACKEND_URL}/api/getUserDetails/${user.email}`)  // API call to fetch user details
         .then((response) => {
           setUserDetails(response.data);  // Set user details from API response
         })

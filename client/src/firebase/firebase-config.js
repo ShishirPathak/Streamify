@@ -4,13 +4,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBkheB6AIhi3ex8_HE28omuOUK5dJYrkWw",
-    authDomain: "streamify-d393e.firebaseapp.com",
-    projectId: "streamify-d393e",
-    storageBucket: "streamify-d393e.appspot.com",
-    messagingSenderId: "443222072818",
-    appId: "1:443222072818:web:3bf0df0948847fc4af5f6b"
-  };
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

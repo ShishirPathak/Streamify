@@ -10,14 +10,13 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { getAuth, signOut } from "firebase/auth";
-import { NavLink, Navigate, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 
 const settings = [
   { name: "My Profile", path: "/myprofile" },
@@ -37,7 +36,7 @@ function ResponsiveAppBar() {
         // Sign-out successful.
         console.log("SignOut Success");
         console.log("User", user);
-        navigate("/signin"); // Redirect to sign-in page after signing out
+        navigate("/dashboard"); // Redirect to sign-in page after signing out
       })
       .catch((error) => {
         // An error happened.

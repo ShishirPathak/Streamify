@@ -10,7 +10,7 @@ const SignOut = () => {
     const signOutUser = async () => {
       try {
         await auth.signOut();
-        navigate("/signin"); // Redirect to sign-in after signing out
+        navigate("/"); // Redirect to sign-in after signing out
       } catch (error) {
         console.error("Error signing out: ", error);
       }

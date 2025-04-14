@@ -31,7 +31,7 @@ const MostRewatchedTimeline = ({ videoId }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5001/api/replayForward/${videoId}`)
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/replayForward/${videoId}`)
       .then((res) => setData(res.data))
       .catch((err) => console.error("Rewatch timeline error", err));
   }, [videoId]);
@@ -42,7 +42,7 @@ const MostRewatchedTimeline = ({ videoId }) => {
 
   return (
     <div style={{ width: "90%", marginLeft: "1%", marginTop: "2rem", marginBottom: "4rem" }}>
-      <h3>Most Rewatched Timeline (Heatmap)</h3>
+      <h3>Most Rewatched Timeline</h3>
 
       <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data} barCategoryGap={0}>

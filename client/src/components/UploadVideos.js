@@ -146,7 +146,7 @@ function UploadVideos() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/uploadVideo",
+        `${process.env.REACT_APP_BACKEND_URL}/api/uploadVideo`,
         data,
         {
           headers: {

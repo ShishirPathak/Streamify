@@ -39,7 +39,7 @@ const VideoPlayer = () => {
   const currentTimeRef = useRef(0);
   const sendProgress = async (playedSeconds, eventType) => {
     console.log("Sending progress:", playedSeconds, eventType);
-    await axios.post("http://localhost:5001/api/track-progress", {
+    await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/track-progress`, {
       videoId: id,
       sessionId: sessionID,
       timestamp: new Date(),
@@ -57,7 +57,7 @@ const VideoPlayer = () => {
   const addToMongoDB = async (videoId) => {
     console.log("Adding to MongoDB", videoId);
     try {
-      await axios.post(`http://localhost:5001/api/add-to-mongodb/${videoId}`, 
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/add-to-mongodb/${videoId}`, 
       {
       },{
         headers: {
@@ -82,7 +82,7 @@ const VideoPlayer = () => {
   useEffect(() => {
     // Fetch video data
     axios
-      .get(`http://localhost:5001/api/getOneVideo/${id}`,{
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/getOneVideo/${id}`,{
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -96,7 +96,7 @@ const VideoPlayer = () => {
     // Fetch user action data
     axios
       .get(
-        `http://localhost:5001/api/getUserAction/${id}?userId=${userDetails.userId}`,{
+        `${process.env.REACT_APP_BACKEND_URL}/api/getUserAction/${id}?userId=${userDetails.userId}`,{
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -111,7 +111,7 @@ const VideoPlayer = () => {
 
   const handleLikeDislike = (videoId, action) => {
     axios
-      .post(`http://localhost:5001/api/likeDislike`, {
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/likeDislike`, {
         videoId: videoId,
         userId: userDetails.userId,
         action,
@@ -119,7 +119,7 @@ const VideoPlayer = () => {
       .then((res) => {
         // After a successful like/dislike, fetch the latest video data
         axios
-          .get(`http://localhost:5001/api/getOneVideo/${videoId}`)
+          .get(`${process.env.REACT_APP_BACKEND_URL}/api/getOneVideo/${videoId}`)
           .then((res) => {
             setVideo(res.data);
           })
@@ -133,7 +133,7 @@ const VideoPlayer = () => {
 
   const handleComment = () => {
     axios
-      .post(`http://localhost:5001/api/addComment/${id}`, {
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/addComment/${id}`, {
         userId: userDetails.userId,
         comment,
       })

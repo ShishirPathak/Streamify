@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
         setUser(user);
         console.log("localStorage.getItem: ",localStorage.getItem("token"))
         axios
-        .get(`http://localhost:5001/api/getUserDetails/${user.email}`,{
+        .get(`${process.env.REACT_APP_BACKEND_URL}/api/getUserDetails/${user.email}`,{
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,

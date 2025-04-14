@@ -24,7 +24,7 @@ const ViewerRetentionGraph = ({ videoId }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5001/api/retention/${videoId}`)
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/retention/${videoId}`)
       .then((res) => setData(res.data))
       .catch((err) => console.error("Error loading retention", err));
   }, [videoId]);
