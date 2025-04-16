@@ -1,6 +1,5 @@
 // Controller (src/controllers/engagementController.js)
 const redis = require("../config/redis");
-const { useParams } = require("react-router-dom");
 const VideoEvent = require("../models/VideoEventSchema"); // MongoDB model
 const EngagementModel = require("../models/EngagementModel"); // MongoDB model
 
