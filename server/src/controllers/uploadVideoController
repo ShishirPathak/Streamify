@@ -1,0 +1,60 @@
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+require("dotenv").config();
+
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+const { S3Client } = require("@aws-sdk/client-s3");
+const UploadVideoModel = require("../models/VideoModel");
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+
+let upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_BUCKET_NAME,
+    key: function (req, file, cb) {
+      cb(null, `videos/${Date.now()}_${file.originalname}`);
+    },
+  }),
+}).single("file");
+
+ const uploadVideo = async (req, res) => {
+  console.log("uploadVideo from server")
+  upload(req, res, async (err) => {
+    if (err) {
+      console.error("S3 Upload Error:", err);
+      return res.status(500).json({ error: "Error uploading file to S3" });
+    }
+    const { title, description, userId, category, email } = req.body;
+    const videoUrl = req.file.location;
+
+    const uploadVideoModel = new UploadVideoModel({
+      title,
+      description,
+      videoUrl,
+      userId,
+      category,
+      email
+      
+    });
+    await uploadVideoModel.save();
+
+    res.status(201).json({ message: "Video uploaded successfully", uploadVideoModel });
+  });
+};
+
+module.exports = {
+    uploadVideo
+}
